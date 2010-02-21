@@ -68,7 +68,7 @@ module Bundler
         end
         opts = reqs.last.is_a?(Hash) ? reqs.pop : {}
 
-        unless dep.respond_to?(:name) && dep.respond_to?(:version_requirements)
+        unless dep.respond_to?(:name) && dep.respond_to?(:requirement)
           dep = Gem::Dependency.new(dep, reqs)
         end
 
@@ -77,13 +77,13 @@ module Bundler
         if spec.nil?
           e = Gem::LoadError.new "#{dep.name} is not part of the bundle. Add it to Gemfile."
           e.name = dep.name
-          e.version_requirement = dep.version_requirements
+          e.version_requirement = dep.requirement
           raise e
         elsif dep !~ spec
           e = Gem::LoadError.new "can't activate #{dep}, already activated #{spec.full_name}. " \
                                  "Make sure all dependencies are added to Gemfile."
           e.name = dep.name
-          e.version_requirement = dep.version_requirements
+          e.version_requirement = dep.requirement
           raise e
         end
 
